@@ -105,6 +105,7 @@ vim.keymap.set('n', '<leader>go', builtin.lsp_outgoing_calls, {})
 vim.keymap.set('n', '<leader>gr', builtin.lsp_references, {})
 vim.keymap.set('n', '<leader>gI', builtin.lsp_implementations, {})
 vim.keymap.set('n', '<leader>gd', builtin.lsp_definitions, {})
+vim.keymap.set('n', '<leader>gD', builtin.lsp_type_definitions, {})
 
 require('telescope').setup{
 	defaults = {
@@ -119,6 +120,27 @@ require('neo-tree').setup({
 	enable_git_status = true,
 })
 vim.keymap.set('n', '<C-d>', '<Cmd>Neotree toggle<CR>', {silent=true})
+
+-- lualine
+require('lualine').setup {
+	options = {
+		icons_enabled = true,
+		theme = 'gruvbox',
+		refresh = {
+			statusline = 1000,
+			tabline = 1000,
+			winbar = 1000,
+		}
+	},
+	sections = {
+		lualine_a = { 'mode' },
+		lualine_b = { 'branch', 'diff', 'diagnostics' },
+		lualine_c = { 'filename', 'bo:filetype'},
+		lualine_x = { 'encoding', 'fileformat', 'filetype' },
+		lualine_y = { 'progress' },
+		lualine_z = { 'location' },
+	},
+}
 
 -- nvim-cmp
 local cmp = require('cmp')
@@ -173,6 +195,9 @@ lspconfig.gopls.setup({
 			},
 --			staticcheck = true,
 			gofumpt = true,
+			buildFlags = {
+				"-tags=vddk",
+			},
 		}
 	},
 	-- NVIM-CMP + LSP
@@ -230,3 +255,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.guifont = "JetBrainsMono Nerd Font Mono:h14"
+vim.o.cmdheight = 0
+vim.o.cursorline = true
